@@ -1,11 +1,26 @@
 import React from "react";
 import { update } from "../BooksAPI";
 
-const UdacityBookshelf = ({ title, books = [], onDataChange }) => {
+const UdacityBookshelf = ({
+  title,
+  books = [],
+  onDataChange,
+  allBooks = [],
+}) => {
   const handleUpdateBook = async (book, shelf) => {
     await update(book, shelf);
     if (onDataChange) {
       await onDataChange();
+    }
+  };
+
+  const getCurrentSheflValue = (book) => {
+    if (allBooks?.length > 0) {
+      const existBook = allBooks.find((b) => b.id === book.id);
+
+      return existBook?.shelf;
+    } else {
+      return null;
     }
   };
 
@@ -17,7 +32,7 @@ const UdacityBookshelf = ({ title, books = [], onDataChange }) => {
           {books.length > 0 &&
             books.map((item, index) => {
               return (
-                <li key={item.title + index}>
+                <li key={item?.title + index}>
                   <div className="book">
                     <div className="book-top">
                       <div
@@ -25,7 +40,7 @@ const UdacityBookshelf = ({ title, books = [], onDataChange }) => {
                         style={{
                           width: 128,
                           height: 193,
-                          backgroundImage: `url("${item.imageLinks.thumbnail}")`,
+                          backgroundImage: `url("${item?.imageLinks?.thumbnail}")`,
                         }}
                       ></div>
                       <div className="book-shelf-changer">
@@ -35,6 +50,11 @@ const UdacityBookshelf = ({ title, books = [], onDataChange }) => {
                             console.log(e.target.value);
                             handleUpdateBook(item, e.target.value);
                           }}
+                          value={
+                            allBooks?.length > 0
+                              ? getCurrentSheflValue(item)
+                              : item?.shelf
+                          }
                         >
                           <option disabled value="none">
                             Move to...
@@ -48,7 +68,7 @@ const UdacityBookshelf = ({ title, books = [], onDataChange }) => {
                         </select>
                       </div>
                     </div>
-                    <div className="book-title">{item.title}</div>
+                    <div className="book-title">{item?.title}</div>
                     <div className="book-authors">{item?.authors?.join()}</div>
                   </div>
                 </li>

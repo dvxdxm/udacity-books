@@ -1,9 +1,11 @@
 import UdacityBookshelf from "./UdacityBookshelf";
 import { useEffect, useState } from "react";
 import { getAll } from "../BooksAPI";
+import { useNavigate } from "react-router-dom";
 
 const DashBoardPage = () => {
   const [groupBookShelfs, setGroupBookShelfs] = useState([]);
+  const navigate = useNavigate();
 
   const getBooksData = async () => {
     const datas = await getAll();
@@ -51,6 +53,9 @@ const DashBoardPage = () => {
             />
           )}
         </div>
+      </div>
+      <div className="open-search">
+        <button onClick={() => navigate("/search")}>Search Page</button>
       </div>
     </div>
   );
