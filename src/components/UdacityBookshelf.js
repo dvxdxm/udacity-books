@@ -1,15 +1,23 @@
 import React from "react";
+import { update } from "../BooksAPI";
 
-const UdacityBookshelf = ({ title, books = [] }) => {
+const UdacityBookshelf = ({ title, books = [], onDataChange }) => {
+  const handleUpdateBook = async (book, shelf) => {
+    await update(book, shelf);
+    if (onDataChange) {
+      await onDataChange();
+    }
+  };
+
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{title}</h2>
       <div className="bookshelf-books">
         <ol className="books-grid">
           {books.length > 0 &&
-            books.map((item) => {
+            books.map((item, index) => {
               return (
-                <li key={item.title}>
+                <li key={item.title + index}>
                   <div className="book">
                     <div className="book-top">
                       <div
@@ -21,8 +29,14 @@ const UdacityBookshelf = ({ title, books = [] }) => {
                         }}
                       ></div>
                       <div className="book-shelf-changer">
-                        <select>
-                          <option value="none" disabled>
+                        <select
+                          defaultValue="none"
+                          onChange={(e) => {
+                            console.log(e.target.value);
+                            handleUpdateBook(item, e.target.value);
+                          }}
+                        >
+                          <option disabled value="none">
                             Move to...
                           </option>
                           <option value="currentlyReading">
@@ -35,7 +49,7 @@ const UdacityBookshelf = ({ title, books = [] }) => {
                       </div>
                     </div>
                     <div className="book-title">{item.title}</div>
-                    <div className="book-authors">{item.authors.join()}</div>
+                    <div className="book-authors">{item?.authors?.join()}</div>
                   </div>
                 </li>
               );
