@@ -20,7 +20,7 @@ const UdacityBookshelf = ({
 
       return existBook?.shelf;
     } else {
-      return null;
+      return "none";
     }
   };
 
@@ -56,7 +56,7 @@ const UdacityBookshelf = ({
                               : item?.shelf
                           }
                         >
-                          <option disabled value="none">
+                          <option disabled value="none2">
                             Move to...
                           </option>
                           <option value="currentlyReading">
